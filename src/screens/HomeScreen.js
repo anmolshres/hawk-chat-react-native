@@ -4,7 +4,7 @@ import { Title } from 'react-native-paper';
 import { AuthContext } from '../navigation/AuthProvider';
 import FormButton from '../components/FormButton';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const { user, logout } = useContext(AuthContext);
 
   return (
@@ -13,9 +13,14 @@ export default function HomeScreen() {
       <Title>All chat rooms will be listed here</Title>
       <Title>{user.uid}</Title>
       <FormButton
-        modeValue='contained'
-        title='Logout'
+        modeValue="contained"
+        title="Logout"
         onPress={() => logout()}
+      />
+      <FormButton
+        modeValue="contained"
+        title="Add Room"
+        onPress={() => navigation.navigate('AddRoom')}
       />
     </View>
   );
@@ -26,6 +31,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 });
