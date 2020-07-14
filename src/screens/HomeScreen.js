@@ -3,8 +3,11 @@ import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { List, Divider } from 'react-native-paper';
 import { firestore } from 'firebase';
 import Loading from '../components/Loading';
+import useStatsBar from '../utils/useStatusBar';
 
 export default function HomeScreen({ navigation }) {
+  useStatsBar('light-content');
+
   const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -14,14 +17,18 @@ export default function HomeScreen({ navigation }) {
   useEffect(() => {
     const unsubscribe = firestore()
       .collection('THREADS')
-      // .orderBy('latestMessage.createdAt', 'desc')
-      .onSnapshot((querySnapshot) => {
-        const threads = querySnapshot.docs.map((documentSnapshot) => {
+      .orderBy('latestMessage.createdAt', 'desc')
+      .onSnapshot(querySnapshot => {
+        const threads = querySnapshot.docs.map(documentSnapshot => {
           return {
             _id: documentSnapshot.id,
             // give defaults
             name: '',
-            ...documentSnapshot.data(),
+
+            latestMessage: {
+              text: ''
+            },
+            ...documentSnapshot.data()
           };
         });
 
@@ -46,7 +53,7 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <FlatList
         data={threads}
-        keyExtractor={(item) => item._id}
+        keyExtractor={item => item._id}
         ItemSeparatorComponent={() => <Divider />}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -54,7 +61,7 @@ export default function HomeScreen({ navigation }) {
           >
             <List.Item
               title={item.name}
-              description="Item description"
+              description={item.latestMessage.text}
               titleNumberOfLines={1}
               titleStyle={styles.listTitle}
               descriptionStyle={styles.listDescription}
@@ -70,12 +77,12 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f5f5f5',
-    flex: 1,
+    flex: 1
   },
   listTitle: {
-    fontSize: 22,
+    fontSize: 22
   },
   listDescription: {
-    fontSize: 16,
-  },
+    fontSize: 16
+  }
 });

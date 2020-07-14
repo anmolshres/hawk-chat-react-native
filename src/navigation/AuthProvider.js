@@ -1,6 +1,11 @@
 import React, { createContext, useState } from 'react';
 import { auth } from 'firebase';
 
+/**
+ * This provider is created
+ * to access user in whole app
+ */
+
 export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
@@ -31,7 +36,7 @@ export const AuthProvider = ({ children }) => {
           } catch (e) {
             console.error(e);
           }
-        },
+        }
       }}
     >
       {children}
