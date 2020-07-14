@@ -149,6 +149,7 @@ export default function RoomScreen({ route }) {
       renderBubble={renderBubble}
       renderLoading={renderLoading}
       renderSend={renderSend}
+      renderUsernameOnMessage={true}
       scrollToBottomComponent={scrollToBottomComponent}
       renderSystemMessage={renderSystemMessage}
     />
