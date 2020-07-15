@@ -2,15 +2,13 @@ import React, { useState, useContext } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Title, IconButton } from 'react-native-paper';
 import { firestore } from 'firebase';
-import FormInput from '../components/FormInput';
-import FormButton from '../components/FormButton';
 import { AuthContext } from '../navigation/AuthProvider';
 import useStatsBar from '../utils/useStatusBar';
 
 export default function MyProfileScreen({ navigation }) {
   useStatsBar('dark-content');
 
-return (
+  return (
     <View style={styles.rootContainer}>
       <View style={styles.closeButtonContainer}>
         <Text>First Last</Text>
@@ -23,7 +21,7 @@ return (
       </View>
       <View style={styles.innerContainer}>
         <Title style={styles.title}>My Profile</Title>
-        
+
       </View>
     </View>
   );

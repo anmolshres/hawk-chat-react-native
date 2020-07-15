@@ -6,6 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import AddRoomScreen from '../screens/AddRoomScreen';
 import MyProfileScreen from '../screens/MyProfileScreen';
 import RoomScreen from '../screens/RoomScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
 import { AuthContext } from './AuthProvider';
 
 const ChatAppStack = createStackNavigator();
@@ -76,7 +77,7 @@ export default function HomeStack() {
   return (
     <ModalStack.Navigator mode='modal' headerMode='none'>
       <ModalStack.Screen name='ChatApp' component={ChatApp} />
-      <ModalStack.Screen name='MyProfile' component={MyProfileScreen} />
+      <ModalStack.Screen name='MyProfile' component={WelcomeScreen} />
       <ModalStack.Screen name='AddRoom' component={AddRoomScreen} />
     </ModalStack.Navigator>
   );
