@@ -16,6 +16,7 @@ export default function SignupScreen({ navigation }) {
       <Title style={styles.titleText}>Register to chat</Title>
       <FormInput
         labelName='Email'
+        keyboardType='email-address'
         value={email}
         autoCapitalize='none'
         onChangeText={userEmail => setEmail(userEmail)}

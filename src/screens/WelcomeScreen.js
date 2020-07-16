@@ -3,6 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { Title, IconButton } from 'react-native-paper';
 import { firestore } from 'firebase';
 import { AuthContext } from '../navigation/AuthProvider';
+import Routes from '../navigation/Routes'
 import FormInput from '../components/FormInput';
 import FormButton from '../components/FormButton';
 import useStatsBar from '../utils/useStatusBar';
@@ -22,13 +23,7 @@ export default function WelcomeScreen({ navigation }) {
     function createProfile() {
 
         return new Promise(function (resolve, reject) {
-            if (!first.length|| !last.length || !year.length || !major.length || !hometown.length) {
-                /*console.log(first.length());
-                console.log(last.length());
-                console.log(year.length());
-                console.log(major.length());
-                console.log(hometown.length());*/
-
+            if (!first.length || !last.length || !year.length || !major.length || !hometown.length) {
                 reject();
             }
             try {
@@ -42,8 +37,13 @@ export default function WelcomeScreen({ navigation }) {
                         classYear: year,
                         major: major,
                         hometown: hometown,
+                    })
+                    .then(() => {
+                        resolve();
+                    })
+                    .catch(() => {
+                        reject();
                     });
-                resolve();
             } catch (e) {
                 console.log(e);
                 reject();
@@ -97,10 +97,13 @@ export default function WelcomeScreen({ navigation }) {
                     modeValue='contained'
                     labelStyle={styles.loginButtonLabel}
                     onPress={() => {
-                        createProfile().then(() => {
-                            console.log("Created");
-                        })
-                            .catch(() => {
+                        createProfile()
+                            .then(() => {
+                            // TODO: NAVIGATE TO HOME STACK
+                            Routes.hasProfile(user);
+                            })
+                            .catch((e) => {
+                                console.log(e);
                                 alert("INVALID INFO");
                             });
 

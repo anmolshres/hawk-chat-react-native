@@ -17,7 +17,11 @@ export default function Routes() {
   function onAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
-    hasProfile(user);
+    if (user) {
+      hasProfile(user);
+    } else {
+      setLoading(false);
+    }
   }
 
   function hasProfile(user) {
