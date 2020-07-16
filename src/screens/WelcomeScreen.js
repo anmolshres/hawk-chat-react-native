@@ -21,6 +21,9 @@ export default function WelcomeScreen({ navigation }) {
 
     function createProfile() {
         return new Promise(function (resolve, reject) {
+            if (!first.length() || !last.length() || !year.length() || !major.length() || !hometown.length()) {
+                reject();
+            }
             try {
                 firestore()
                     .collection('USERS')
@@ -89,6 +92,9 @@ export default function WelcomeScreen({ navigation }) {
                     onPress={() => {
                         createProfile().then(() => {
                             navigation.goBack();
+                        })
+                        .catch(() => {
+                            alert("INVALID INFO");
                         });
 
                     }}

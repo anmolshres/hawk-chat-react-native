@@ -18,6 +18,21 @@ export default function Routes() {
     setLoading(false);
   }
 
+  function hasProfile() {
+    db.collection("USERS").where("userID", "==", user.toJSON().uid)
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          return true;
+        } else {
+          return false;
+        }
+      }).catch(function (error) {
+        console.log("Error getting documents: ", error);
+      });
+
+  }
+
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
