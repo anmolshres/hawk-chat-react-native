@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { auth } from 'firebase';
+import { auth, firestore } from 'firebase';
 import AuthStack from './AuthStack';
 import HomeStack from './HomeStack';
 import { AuthContext } from './AuthProvider';
@@ -19,7 +19,7 @@ export default function Routes() {
   }
 
   function hasProfile() {
-    db.collection("USERS").where("userID", "==", user.toJSON().uid)
+    firestore().collection("USERS").where("userID", "==", user.toJSON().uid)
       .get()
       .then(function (doc) {
         if (doc.exists) {
