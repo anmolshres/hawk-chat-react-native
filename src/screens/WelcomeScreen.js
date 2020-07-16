@@ -20,8 +20,15 @@ export default function WelcomeScreen({ navigation }) {
     const [hometown, setHometown] = useState('');
 
     function createProfile() {
+
         return new Promise(function (resolve, reject) {
-            if (!first.length() || !last.length() || !year.length() || !major.length() || !hometown.length()) {
+            if (!first.length|| !last.length || !year.length || !major.length || !hometown.length) {
+                /*console.log(first.length());
+                console.log(last.length());
+                console.log(year.length());
+                console.log(major.length());
+                console.log(hometown.length());*/
+
                 reject();
             }
             try {
@@ -91,11 +98,11 @@ export default function WelcomeScreen({ navigation }) {
                     labelStyle={styles.loginButtonLabel}
                     onPress={() => {
                         createProfile().then(() => {
-                            navigation.goBack();
+                            console.log("Created");
                         })
-                        .catch(() => {
-                            alert("INVALID INFO");
-                        });
+                            .catch(() => {
+                                alert("INVALID INFO");
+                            });
 
                     }}
                 />
