@@ -3,34 +3,34 @@ import { NavigationContainer } from '@react-navigation/native';
 import { auth, firestore } from 'firebase';
 import AuthStack from './AuthStack';
 import HomeStack from './HomeStack';
+import WelcomeStack from './WelcomeStack';
 import { AuthContext } from './AuthProvider';
 import Loading from '../components/Loading';
 
 export default function Routes() {
   const { user, setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState(false);
   const [initializing, setInitializing] = useState(true);
 
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
-    setLoading(false);
+    hasProfile(user);
   }
 
-  function hasProfile() {
+  function hasProfile(user) {
+    console.log(user.toJSON().uid);
     firestore().collection("USERS").where("userID", "==", user.toJSON().uid)
       .get()
-      .then(function (doc) {
-        if (doc.exists) {
-          return true;
-        } else {
-          return false;
-        }
+      .then(function (querySnapshot) {
+        setProfile(!querySnapshot.empty);
       }).catch(function (error) {
         console.log("Error getting documents: ", error);
+      }).finally(() => {
+        setLoading(false);
       });
-
   }
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function Routes() {
 
   return (
     <NavigationContainer>
-      {user ? <HomeStack /> : <AuthStack />}
+      {user ? (profile ? <HomeStack /> : <WelcomeStack />) : <AuthStack />}
     </NavigationContainer>
   );
 }
