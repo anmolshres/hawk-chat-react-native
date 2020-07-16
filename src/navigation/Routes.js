@@ -3,7 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { auth, firestore } from 'firebase';
 import AuthStack from './AuthStack';
 import HomeStack from './HomeStack';
-import WelcomeStack from './WelcomeStack';
 import { AuthContext } from './AuthProvider';
 import Loading from '../components/Loading';
 
@@ -48,7 +47,7 @@ export default function Routes() {
 
   return (
     <NavigationContainer>
-      {user ? (profile ? <HomeStack /> : <WelcomeStack />) : <AuthStack />}
+      {user ?  <HomeStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }
