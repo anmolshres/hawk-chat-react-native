@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import { auth } from 'firebase';
+import firebaseApp from '../../firebase';
 
 /**
  * This provider is created
@@ -18,25 +18,29 @@ export const AuthProvider = ({ children }) => {
         setUser,
         login: async (email, password) => {
           try {
-            await auth().signInWithEmailAndPassword(email, password);
+            await firebaseApp
+              .auth()
+              .signInWithEmailAndPassword(email, password);
           } catch (e) {
             console.log(e);
           }
         },
         register: async (email, password) => {
           try {
-            await auth().createUserWithEmailAndPassword(email, password);
+            await firebaseApp
+              .auth()
+              .createUserWithEmailAndPassword(email, password);
           } catch (e) {
             console.log(e);
           }
         },
         logout: async () => {
           try {
-            await auth().signOut();
+            await firebaseApp.auth().signOut();
           } catch (e) {
             console.error(e);
           }
-        }
+        },
       }}
     >
       {children}

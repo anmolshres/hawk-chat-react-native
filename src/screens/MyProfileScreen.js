@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Title, IconButton } from 'react-native-paper';
-import { firestore } from 'firebase';
 import FormInput from '../components/FormInput';
 import FormButton from '../components/FormButton';
 import { AuthContext } from '../navigation/AuthProvider';

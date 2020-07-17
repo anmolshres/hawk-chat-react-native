@@ -8,7 +8,7 @@ import {
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { AuthContext } from '../navigation/AuthProvider';
-import { firestore } from 'firebase';
+import firebaseApp from '../../firebase';
 import useStatsBar from '../utils/useStatusBar';
 
 export default function RoomScreen({ route }) {
@@ -21,8 +21,8 @@ export default function RoomScreen({ route }) {
 
   async function handleSend(messages) {
     const text = messages[0].text;
-
-    firestore()
+    firebaseApp
+      .firestore()
       .collection('THREADS')
       .doc(thread._id)
       .collection('MESSAGES')
@@ -35,7 +35,8 @@ export default function RoomScreen({ route }) {
         },
       });
 
-    await firestore()
+    await firebaseApp
+      .firestore()
       .collection('THREADS')
       .doc(thread._id)
       .set(
@@ -50,7 +51,8 @@ export default function RoomScreen({ route }) {
   }
 
   useEffect(() => {
-    const messagesListener = firestore()
+    const messagesListener = firebaseApp
+      .firestore()
       .collection('THREADS')
       .doc(thread._id)
       .collection('MESSAGES')
