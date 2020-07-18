@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     width: width / 1.5,
-    height: height / 15
-  }
+    height: height / 15,
+  },
 });
