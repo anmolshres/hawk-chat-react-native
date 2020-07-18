@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { Alert, View, StyleSheet } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton } from 'react-native-paper';
 import HomeScreen from '../screens/HomeScreen';
@@ -7,6 +7,9 @@ import AddRoomScreen from '../screens/AddRoomScreen';
 import MyProfileScreen from '../screens/MyProfileScreen';
 import RoomScreen from '../screens/RoomScreen';
 import { AuthContext } from './AuthProvider';
+import AdditionalInfo from '../screens/AdditionalInfo';
+import Loading from '../components/Loading';
+import firebaseApp from '../../firebase';
 
 const ChatAppStack = createStackNavigator();
 const ModalStack = createStackNavigator();
@@ -72,11 +75,32 @@ function ChatApp() {
 }
 
 export default function HomeStack() {
+  const { user } = useContext(AuthContext);
+  const [initialRouteName, setInitialRouteName] = useState('');
+  checkNewUser(user);
+  async function checkNewUser(currentUser) {
+    const dbData = await firebaseApp
+      .firestore()
+      .collection('USERS')
+      .where('userID', '==', currentUser.toJSON().uid)
+      .get();
+    dbData.empty
+      ? setInitialRouteName('AdditionalInfo')
+      : setInitialRouteName('ChatApp');
+  }
+
+  if (!initialRouteName.length) return <Loading />;
+
   return (
-    <ModalStack.Navigator mode="modal" headerMode="none">
+    <ModalStack.Navigator
+      mode="modal"
+      headerMode="none"
+      initialRouteName={initialRouteName}
+    >
       <ModalStack.Screen name="ChatApp" component={ChatApp} />
       <ModalStack.Screen name="MyProfile" component={MyProfileScreen} />
       <ModalStack.Screen name="AddRoom" component={AddRoomScreen} />
+      <ModalStack.Screen name="AdditionalInfo" component={AdditionalInfo} />
     </ModalStack.Navigator>
   );
 }
