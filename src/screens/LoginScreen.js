@@ -60,9 +60,7 @@ export default function LoginScreen({ navigation }) {
       const { id_token } = response.params;
 
       const credential = firebase.auth.GoogleAuthProvider.credential(id_token);
-      login(credential).then((isNew) => {
-        console.log(isNew);
-      });
+      login(credential);
     }
   }, [response]);
   return (
