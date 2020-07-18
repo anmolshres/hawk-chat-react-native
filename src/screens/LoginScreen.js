@@ -20,8 +20,8 @@ const useProxy = Platform.select({ web: false, default: true });
 
 // Generate a random hex string for the nonce parameter
 function useNonce() {
-  const [nonce, setNonce] = React.useState(null);
-  React.useEffect(() => {
+  const [nonce, setNonce] = useState(null);
+  useEffect(() => {
     generateHexStringAsync(16).then((value) => setNonce(value));
   }, []);
   return nonce;
@@ -60,7 +60,9 @@ export default function LoginScreen({ navigation }) {
       const { id_token } = response.params;
 
       const credential = firebase.auth.GoogleAuthProvider.credential(id_token);
-      login(credential);
+      login(credential).then((isNew) => {
+        console.log(isNew);
+      });
     }
   }, [response]);
   return (
