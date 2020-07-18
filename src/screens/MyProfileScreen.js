@@ -16,7 +16,7 @@ return (
         <IconButton
           icon='close-circle'
           size={36}
-          color='#6646ee'
+          color='#9a4502'
           onPress={() => navigation.goBack()}
         />
       </View>

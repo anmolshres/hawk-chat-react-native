@@ -23,7 +23,7 @@ function ChatApp() {
     <ChatAppStack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#6646ee',
+          backgroundColor: '#9a4502',
         },
         headerTintColor: '#ffffff',
         headerTitleStyle: {
