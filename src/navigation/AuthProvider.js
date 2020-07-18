@@ -16,20 +16,9 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         setUser,
-        login: async (email, password) => {
+        login: async (credential) => {
           try {
-            await firebaseApp
-              .auth()
-              .signInWithEmailAndPassword(email, password);
-          } catch (e) {
-            console.log(e);
-          }
-        },
-        register: async (email, password) => {
-          try {
-            await firebaseApp
-              .auth()
-              .createUserWithEmailAndPassword(email, password);
+            await firebaseApp.auth().signInWithCredential(credential);
           } catch (e) {
             console.log(e);
           }

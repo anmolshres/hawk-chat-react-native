@@ -16,56 +16,56 @@ const ModalStack = createStackNavigator();
  */
 
 function ChatApp() {
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
+  console.log(user);
 
   return (
     <ChatAppStack.Navigator
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#6646ee'
+          backgroundColor: '#6646ee',
         },
         headerTintColor: '#ffffff',
         headerTitleStyle: {
-          fontSize: 22
-        }
+          fontSize: 22,
+        },
       }}
     >
       <ChatAppStack.Screen
-        name='Home'
+        name="Home"
         component={HomeScreen}
         options={({ navigation }) => ({
           headerRight: () => (
             <View style={styles.iconContainer}>
-
               <IconButton
-                icon='account'
+                icon="account"
                 size={28}
-                color='#ffffff'
+                color="#ffffff"
                 onPress={() => navigation.navigate('MyProfile')}
               />
               <IconButton
-                icon='message-plus'
+                icon="message-plus"
                 size={28}
-                color='#ffffff'
+                color="#ffffff"
                 onPress={() => navigation.navigate('AddRoom')}
               />
             </View>
           ),
           headerLeft: () => (
             <IconButton
-              icon='logout-variant'
+              icon="logout-variant"
               size={28}
-              color='#ffffff'
+              color="#ffffff"
               onPress={() => logout()}
             />
-          )
+          ),
         })}
       />
       <ChatAppStack.Screen
-        name='Room'
+        name="Room"
         component={RoomScreen}
         options={({ route }) => ({
-          title: route.params.thread.name
+          title: route.params.thread.name,
         })}
       />
     </ChatAppStack.Navigator>
@@ -74,24 +74,24 @@ function ChatApp() {
 
 export default function HomeStack() {
   return (
-    <ModalStack.Navigator mode='modal' headerMode='none'>
-      <ModalStack.Screen name='ChatApp' component={ChatApp} />
-      <ModalStack.Screen name='MyProfile' component={MyProfileScreen} />
-      <ModalStack.Screen name='AddRoom' component={AddRoomScreen} />
+    <ModalStack.Navigator mode="modal" headerMode="none">
+      <ModalStack.Screen name="ChatApp" component={ChatApp} />
+      <ModalStack.Screen name="MyProfile" component={MyProfileScreen} />
+      <ModalStack.Screen name="AddRoom" component={AddRoomScreen} />
     </ModalStack.Navigator>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   icon: {
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   iconContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: 120
-  }
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: 120,
+  },
 });
