@@ -10,7 +10,6 @@ export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isNewUser, setIsNewUser] = useState(false);
 
   return (
     <AuthContext.Provider
@@ -19,9 +18,7 @@ export const AuthProvider = ({ children }) => {
         setUser,
         login: async (credential) => {
           try {
-            return await (
-              await firebaseApp.auth().signInWithCredential(credential)
-            ).additionalUserInfo.isNewUser;
+            await firebaseApp.auth().signInWithCredential(credential);
           } catch (e) {
             console.log(e);
           }
