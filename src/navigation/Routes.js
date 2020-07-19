@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { auth } from 'firebase';
 import AuthStack from './AuthStack';
 import HomeStack from './HomeStack';
 import { AuthContext } from './AuthProvider';
 import Loading from '../components/Loading';
+import firebaseApp from '../../firebase';
 
 export default function Routes() {
   const { user, setUser } = useContext(AuthContext);
@@ -19,7 +19,9 @@ export default function Routes() {
   }
 
   useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    const subscriber = firebaseApp
+      .auth()
+      .onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
 

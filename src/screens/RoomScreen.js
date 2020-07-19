@@ -8,7 +8,7 @@ import {
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { AuthContext } from '../navigation/AuthProvider';
-import { firestore } from 'firebase';
+import firebaseApp from '../../firebase';
 import useStatsBar from '../utils/useStatusBar';
 
 export default function RoomScreen({ route }) {
@@ -21,8 +21,8 @@ export default function RoomScreen({ route }) {
 
   async function handleSend(messages) {
     const text = messages[0].text;
-
-    firestore()
+    firebaseApp
+      .firestore()
       .collection('THREADS')
       .doc(thread._id)
       .collection('MESSAGES')
@@ -35,7 +35,8 @@ export default function RoomScreen({ route }) {
         },
       });
 
-    await firestore()
+    await firebaseApp
+      .firestore()
       .collection('THREADS')
       .doc(thread._id)
       .set(
@@ -50,7 +51,8 @@ export default function RoomScreen({ route }) {
   }
 
   useEffect(() => {
-    const messagesListener = firestore()
+    const messagesListener = firebaseApp
+      .firestore()
       .collection('THREADS')
       .doc(thread._id)
       .collection('MESSAGES')
@@ -89,7 +91,7 @@ export default function RoomScreen({ route }) {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: '#6646ee',
+            backgroundColor: '#9a4502',
           },
         }}
         textStyle={{
@@ -104,7 +106,7 @@ export default function RoomScreen({ route }) {
   function renderLoading() {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6646ee" />
+        <ActivityIndicator size="large" color="#9a4502" />
       </View>
     );
   }
@@ -113,7 +115,7 @@ export default function RoomScreen({ route }) {
     return (
       <Send {...props}>
         <View style={styles.sendingContainer}>
-          <IconButton icon="send-circle" size={32} color="#6646ee" />
+          <IconButton icon="send-circle" size={32} color="#9a4502" />
         </View>
       </Send>
     );
@@ -122,7 +124,7 @@ export default function RoomScreen({ route }) {
   function scrollToBottomComponent() {
     return (
       <View style={styles.bottomComponentContainer}>
-        <IconButton icon="chevron-double-down" size={36} color="#6646ee" />
+        <IconButton icon="chevron-double-down" size={36} color="#9a4502" />
       </View>
     );
   }
@@ -171,7 +173,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   systemMessageWrapper: {
-    backgroundColor: '#6646ee',
+    backgroundColor: '#9a4502',
     borderRadius: 4,
     padding: 5,
   },

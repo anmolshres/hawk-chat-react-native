@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { List, Divider } from 'react-native-paper';
-import * as firebase from 'firebase';
-import 'firebase/firestore';
+import firebaseApp from '../../firebase';
 import Loading from '../components/Loading';
 import useStatsBar from '../utils/useStatusBar';
 
@@ -16,7 +15,7 @@ export default function HomeScreen({ navigation }) {
    * Fetch threads from Firestore
    */
   useEffect(() => {
-    const unsubscribe = firebase
+    const unsubscribe = firebaseApp
       .firestore()
       .collection('THREADS')
       .orderBy('latestMessage.createdAt', 'desc')

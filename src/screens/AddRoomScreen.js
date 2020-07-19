@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { IconButton, Title } from 'react-native-paper';
-import { firestore } from 'firebase';
+import firebaseApp from '../../firebase'
 import FormInput from '../components/FormInput';
 import FormButton from '../components/FormButton';
 import useStatsBar from '../utils/useStatusBar';
@@ -15,7 +15,8 @@ export default function AddRoomScreen({ navigation }) {
    */
   function handleButtonPress() {
     if (roomName.length > 0) {
-      firestore()
+        firebaseApp
+        .firestore()
         .collection('THREADS')
         .add({
           name: roomName,
@@ -40,7 +41,7 @@ export default function AddRoomScreen({ navigation }) {
         <IconButton
           icon='close-circle'
           size={36}
-          color='#6646ee'
+          color='#9a4502'
           onPress={() => navigation.goBack()}
         />
       </View>

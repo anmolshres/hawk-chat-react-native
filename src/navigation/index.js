@@ -1,15 +1,24 @@
 import React from 'react';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { AuthProvider } from './AuthProvider';
 import Routes from './Routes';
 
 /**
  * Wrap all providers here
  */
-
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#9A4502',
+    accent: '#f1c40f',
+  },
+};
+ 
 export default function Providers() {
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <AuthProvider>
         <Routes />
       </AuthProvider>
