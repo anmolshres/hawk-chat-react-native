@@ -19,6 +19,7 @@ export default function createProfile(
           classYear: year,
           major: major,
           hometown: hometown,
+          avatar: currentUser.photoURL,
         })
         .then(() => {
           resolve();
