@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton } from 'react-native-paper';
 import HomeScreen from '../screens/HomeScreen';
-import AddRoomScreen from '../screens/AddRoomScreen';
+import StartMessage from '../screens/StartMessage';
 import MyProfileScreen from '../screens/MyProfileScreen';
 import RoomScreen from '../screens/RoomScreen';
 import { AuthContext } from './AuthProvider';
@@ -99,7 +99,7 @@ export default function HomeStack() {
     >
       <ModalStack.Screen name="ChatApp" component={ChatApp} />
       <ModalStack.Screen name="MyProfile" component={MyProfileScreen} />
-      <ModalStack.Screen name="AddRoom" component={AddRoomScreen} />
+      <ModalStack.Screen name="AddRoom" component={StartMessage} />
       <ModalStack.Screen name="AdditionalInfo" component={AdditionalInfo} />
     </ModalStack.Navigator>
   );

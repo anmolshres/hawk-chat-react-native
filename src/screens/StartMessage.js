@@ -9,7 +9,7 @@ import SearchResults from '../components/SearchResults';
 
 const { width, height } = Dimensions.get('screen');
 
-export default function AddRoomScreen({ navigation }) {
+export default function StartMessage({ navigation }) {
   useStatsBar('dark-content');
   const [roomName, setRoomName] = useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
