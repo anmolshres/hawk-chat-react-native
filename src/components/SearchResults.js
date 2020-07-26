@@ -1,23 +1,37 @@
 import * as React from 'react';
-import { List } from 'react-native-paper';
+import { List, Avatar, IconButton } from 'react-native-paper';
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
 
-export const SearchResults = () => (
-  <List.Section style={styles.allResults}>
-    <List.Item
-      title="First Item"
-      left={() => <List.Icon icon="folder" />}
-      style={styles.result}
-    />
-    <List.Item
-      title="Second Item"
-      left={() => <List.Icon color="#000" icon="folder" />}
-      style={styles.result}
-    />
-  </List.Section>
-);
+export const SearchResults = ({ matches, handleAddThread }) => {
+  return (
+    <List.Section style={styles.allResults}>
+      {matches.map((match) => {
+        return (
+          <List.Item
+            title={match.displayName.concat(
+              ` (${match.email.replace(/@.*/g, '')})`
+            )}
+            left={() => (
+              <Avatar.Image size={30} source={{ uri: match.avatar }} />
+            )}
+            right={() => (
+              <IconButton
+                size={30}
+                icon="pencil"
+                onPress={(bro) => console.log(match.displayName)}
+              />
+            )}
+            style={styles.result}
+            key={match.email}
+            onPress={() => console.log(match.email)}
+          />
+        );
+      })}
+    </List.Section>
+  );
+};
 
 const styles = StyleSheet.create({
   allResults: {

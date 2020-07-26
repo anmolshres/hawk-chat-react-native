@@ -39,7 +39,7 @@ export default function StartMessage({ navigation }) {
   /**
    * Create a new Firestore collection to save threads
    */
-  function handleButtonPress() {
+  function handleAddThread() {
     if (roomName.length > 0) {
       firebaseApp
         .firestore()
@@ -95,7 +95,12 @@ export default function StartMessage({ navigation }) {
           enablesReturnKeyAutomatically
           onSubmitEditing={() => handleSearchPress()}
         />
-        {searchResults.length > 0 && <SearchResults />}
+        {searchResults.length > 0 && (
+          <SearchResults
+            matches={searchResults}
+            handleAddThread={handleAddThread}
+          />
+        )}
         <FormButton
           title="Search"
           modeValue="contained"
