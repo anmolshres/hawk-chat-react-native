@@ -32,6 +32,7 @@ export default function AdditionalInfo({ navigation }) {
         placeholder="John Simon"
         autoCapitalize="words"
         onChangeText={(displayName) => setDisplayName(displayName)}
+        onSubmitEditing={() => handleSubmit()}
       />
       <FormInput
         labelName="Class Year"
@@ -39,6 +40,7 @@ export default function AdditionalInfo({ navigation }) {
         keyboardType="numeric"
         placeholder="2024"
         onChangeText={(year) => setYear(year)}
+        onSubmitEditing={() => handleSubmit()}
       />
       <FormInput
         labelName="Major"
@@ -46,6 +48,7 @@ export default function AdditionalInfo({ navigation }) {
         placeholder="Computer Science"
         autoCapitalize="words"
         onChangeText={(major) => setMajor(major)}
+        onSubmitEditing={() => handleSubmit()}
       />
       <FormInput
         labelName="Hometown"
@@ -53,6 +56,7 @@ export default function AdditionalInfo({ navigation }) {
         placeholder="Bethlehem, PA"
         autoCapitalize="words"
         onChangeText={(hometown) => setHometown(hometown)}
+        onSubmitEditing={() => handleSubmit()}
       />
       <FormButton
         title="Signup"
