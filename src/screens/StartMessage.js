@@ -33,6 +33,7 @@ export default function StartMessage({ navigation }) {
     const unsubscribeThreads = firebaseApp
       .firestore()
       .collection('THREADS')
+      .where('type','==','group')
       .onSnapshot((querySnapshot) => {
         const currentResult = querySnapshot.docs.map((singleDoc) => {
           return { _id: singleDoc.id, ...singleDoc.data() };
