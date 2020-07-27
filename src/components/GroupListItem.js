@@ -1,10 +1,37 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { List, Avatar, IconButton } from 'react-native-paper';
 import { StyleSheet, Dimensions } from 'react-native';
+import { AuthContext } from '../navigation/AuthProvider';
+import firebaseApp from '../../firebase';
 
 const { width, height } = Dimensions.get('screen');
+const firebase = require('firebase/app');
 
 export const GroupListItem = ({ match, openProfile, navigation }) => {
+  const { user } = useContext(AuthContext);
+
+  function updateThreadDatabase(roomId) {
+    firebaseApp
+      .firestore()
+      .collection('THREADS')
+      .where('type', '==', 'group')
+      .where('participants', 'array-contains', user.email)
+      .onSnapshot((querySnapshot) => {
+        const isEmpty = querySnapshot.empty;
+        if (isEmpty) {
+          firebaseApp
+            .firestore()
+            .collection('THREADS')
+            .doc(roomId)
+            .update({
+              participants: firebase.firestore.FieldValue.arrayUnion(
+                user.email
+              ),
+            });
+        }
+      });
+  }
+
   return (
     <List.Item
       title={match.name}
@@ -13,7 +40,10 @@ export const GroupListItem = ({ match, openProfile, navigation }) => {
         <IconButton
           size={30}
           icon="pencil"
-          onPress={() => navigation.navigate('Room', { thread: match })}
+          onPress={() => {
+            updateThreadDatabase(match._id);
+            navigation.navigate('Room', { thread: match });
+          }}
         />
       )}
       style={styles.result}
