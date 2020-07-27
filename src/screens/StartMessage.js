@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { IconButton, Title, Searchbar } from 'react-native-paper';
 import firebaseApp from '../../firebase';
-import FormButton from '../components/FormButton';
 import useStatsBar from '../utils/useStatusBar';
 import Loading from '../components/Loading';
 import SearchResults from '../components/SearchResults';
@@ -11,7 +10,6 @@ const { width, height } = Dimensions.get('screen');
 
 export default function StartMessage({ navigation }) {
   useStatsBar('dark-content');
-  const [roomName, setRoomName] = useState('');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [loading, setLoading] = useState(true);
   const [searchResults, setSearchResults] = useState([]);
@@ -33,13 +31,17 @@ export default function StartMessage({ navigation }) {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    handleSearchPress();
+  }, [searchQuery]);
+
   if (loading) {
     return <Loading />;
   }
   /**
    * Create a new Firestore collection to save threads
    */
-  function handleAddThread() {
+  function handleAddThread(roomName) {
     if (roomName.length > 0) {
       firebaseApp
         .firestore()
@@ -60,6 +62,10 @@ export default function StartMessage({ navigation }) {
           navigation.navigate('Home');
         });
     }
+  }
+
+  function openProfile() {
+    navigation.navigate('MyProfile');
   }
 
   function handleSearchPress() {
@@ -95,22 +101,13 @@ export default function StartMessage({ navigation }) {
           placeholder="Search"
           onChangeText={(query) => setSearchQuery(query)}
           value={searchQuery}
-          onIconPress={() => handleSearchPress()}
           enablesReturnKeyAutomatically
-          onSubmitEditing={() => handleSearchPress()}
         />
-        {searchResults.length > 0 && (
-          <SearchResults
-            matches={searchResults}
-            handleAddThread={handleAddThread}
-          />
-        )}
-        <FormButton
-          title="Search"
-          modeValue="contained"
-          labelStyle={styles.buttonLabel}
-          onPress={() => handleSearchPress()}
-          disabled={searchQuery.length === 0}
+        <SearchResults
+          matches={searchResults}
+          searchQuery={searchQuery}
+          handleAddThread={handleAddThread}
+          openProfile={openProfile}
         />
       </View>
     </View>

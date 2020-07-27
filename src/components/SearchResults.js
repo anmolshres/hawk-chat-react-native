@@ -4,7 +4,29 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
 
-export const SearchResults = ({ matches, handleAddThread }) => {
+export const SearchResults = ({
+  matches,
+  searchQuery,
+  handleAddThread,
+  openProfile,
+}) => {
+  if (searchQuery.length == 0) {
+    return null;
+  }
+
+  if (matches.length == 0) {
+    return (
+      <List.Section style={styles.allResults}>
+        <List.Item
+          title={`Create group "${searchQuery}"`}
+          style={styles.result}
+          left={() => <Avatar.Icon size={30} icon="forum" />}
+          onPress={() => handleAddThread(searchQuery)}
+        />
+      </List.Section>
+    );
+  }
+
   return (
     <List.Section style={styles.allResults}>
       {matches.map((match) => {
@@ -25,7 +47,7 @@ export const SearchResults = ({ matches, handleAddThread }) => {
             )}
             style={styles.result}
             key={match.email}
-            onPress={() => console.log(match.email)}
+            onPress={() => openProfile()}
           />
         );
       })}
@@ -35,7 +57,7 @@ export const SearchResults = ({ matches, handleAddThread }) => {
 
 const styles = StyleSheet.create({
   allResults: {
-    marginTop: -15,
+    marginTop: -5,
   },
   result: {
     marginTop: 10,
