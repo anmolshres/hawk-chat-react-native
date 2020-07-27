@@ -45,8 +45,6 @@ export default function StartMessage({ navigation }) {
     };
   }, []);
 
-  useEffect(() => {}, []);
-
   useEffect(() => {
     handleSearchPress();
   }, [searchQuery]);
