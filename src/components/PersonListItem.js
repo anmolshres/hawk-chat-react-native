@@ -1,10 +1,42 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { List, Avatar, IconButton } from 'react-native-paper';
 import { StyleSheet, Dimensions } from 'react-native';
+import { AuthContext } from '../navigation/AuthProvider';
+import firebaseApp from '../../firebase';
+import getUserInfo from '../utils/getUserInfo';
 
 const { width, height } = Dimensions.get('screen');
 
-export const PersonListItem = ({ match, openProfile }) => {
+export const PersonListItem = ({ match, openProfile, navigation }) => {
+  const { user } = useContext(AuthContext);
+
+  function handleAddPrivateMessage(targetName) {
+    if (targetName) {
+      getUserInfo(user.email).then((currUser) => {
+        firebaseApp
+          .firestore()
+          .collection('THREADS')
+          .add({
+            name: `Private thread between ${currUser.email} and ${targetName.email}`,
+            latestMessage: {
+              text: `${currUser.displayName} started a conversation with ${targetName.displayName}.`,
+              createdAt: new Date().getTime(),
+            },
+            participants: [currUser.email, targetName.email],
+            type: 'private',
+          })
+          .then((docRef) => {
+            docRef.collection('MESSAGES').add({
+              text: `${currUser.displayName} started a conversation with ${targetName.displayName}.`,
+              createdAt: new Date().getTime(),
+              system: true,
+            });
+            navigation.navigate('Home');
+          });
+      });
+    }
+  }
+
   return (
     <List.Item
       title={match.displayName.concat(` (${match.email.replace(/@.*/g, '')})`)}
@@ -19,7 +51,7 @@ export const PersonListItem = ({ match, openProfile }) => {
         <IconButton
           size={30}
           icon="pencil"
-          onPress={() => console.log(match.displayName)}
+          onPress={() => handleAddPrivateMessage(match)}
         />
       )}
       style={styles.result}

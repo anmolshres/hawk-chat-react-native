@@ -39,6 +39,7 @@ export const SearchResults = ({
               match={match}
               openProfile={openProfile}
               key={match.email}
+              navigation={navigation}
             />
           );
         } else {
