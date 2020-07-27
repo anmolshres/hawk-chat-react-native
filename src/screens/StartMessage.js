@@ -14,22 +14,38 @@ export default function StartMessage({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [searchResults, setSearchResults] = useState([]);
   const [textOptions, setTextOptions] = useState([]);
+  const [threadOptions, setThreadOptions] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = firebaseApp
+    const unsubscribePeople = firebaseApp
       .firestore()
       .collection('USERS')
       .onSnapshot((querySnapshot) => {
         const currentResult = querySnapshot.docs.map((singleDoc) =>
           singleDoc.data()
         );
-        setTextOptions([...textOptions, ...currentResult]);
+        setTextOptions([...currentResult]);
+      });
+
+    const unsubscribeThreads = firebaseApp
+      .firestore()
+      .collection('THREADS')
+      .onSnapshot((querySnapshot) => {
+        const currentResult = querySnapshot.docs.map((singleDoc) =>
+          singleDoc.data()
+        );
+        setThreadOptions([...currentResult]);
       });
 
     setLoading(false);
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribePeople();
+      unsubscribeThreads();
+    };
   }, []);
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     handleSearchPress();
@@ -74,14 +90,17 @@ export default function StartMessage({ navigation }) {
       return;
     }
     const cleanedQuery = searchQuery.toLowerCase().replace(/ /g, '');
-    const results = textOptions.filter((option) => {
+    const peopleResults = textOptions.filter((option) => {
       return option.displayName
         .concat(option.email)
         .toLowerCase()
         .replace(/ /g, '')
         .includes(cleanedQuery);
     });
-    setSearchResults([...results]);
+    const threadResults = threadOptions.filter((option) => {
+      return option.name.toLowerCase().replace(/ /g, '').includes(cleanedQuery);
+    });
+    setSearchResults([...peopleResults, ...threadResults]);
   }
 
   return (

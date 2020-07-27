@@ -30,30 +30,49 @@ export const SearchResults = ({
   return (
     <List.Section style={styles.allResults}>
       {matches.map((match) => {
-        return (
-          <List.Item
-            title={match.displayName.concat(
-              ` (${match.email.replace(/@.*/g, '')})`
-            )}
-            left={() =>
-              match.avatar ? (
-                <Avatar.Image size={30} source={{ uri: match.avatar }} />
-              ) : (
-                <Avatar.Icon size={30} icon="account" />
-              )
-            }
-            right={() => (
-              <IconButton
-                size={30}
-                icon="pencil"
-                onPress={(bro) => console.log(match.displayName)}
-              />
-            )}
-            style={styles.result}
-            key={match.email}
-            onPress={() => openProfile()}
-          />
-        );
+        if (match.displayName) {
+          return (
+            <List.Item
+              title={match.displayName.concat(
+                ` (${match.email.replace(/@.*/g, '')})`
+              )}
+              left={() =>
+                match.avatar ? (
+                  <Avatar.Image size={30} source={{ uri: match.avatar }} />
+                ) : (
+                  <Avatar.Icon size={30} icon="account" />
+                )
+              }
+              right={() => (
+                <IconButton
+                  size={30}
+                  icon="pencil"
+                  onPress={(bro) => console.log(match.displayName)}
+                />
+              )}
+              style={styles.result}
+              key={match.email}
+              onPress={() => openProfile()}
+            />
+          );
+        } else {
+          return (
+            <List.Item
+              title={match.name}
+              left={() => <Avatar.Icon size={30} icon="account-group" />}
+              right={() => (
+                <IconButton
+                  size={30}
+                  icon="pencil"
+                  onPress={(bro) => console.log(match.name)}
+                />
+              )}
+              style={styles.result}
+              key={match.name}
+              onPress={() => openProfile()}
+            />
+          );
+        }
       })}
     </List.Section>
   );
