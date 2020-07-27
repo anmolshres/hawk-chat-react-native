@@ -10,6 +10,7 @@ export default function FormInput({ labelName, ...rest }) {
       label={labelName}
       style={styles.input}
       numberOfLines={1}
+      enablesReturnKeyAutomatically
       {...rest}
     />
   );
