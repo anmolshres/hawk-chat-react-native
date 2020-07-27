@@ -14,11 +14,12 @@ export const GroupListItem = ({ match, openProfile, navigation }) => {
     firebaseApp
       .firestore()
       .collection('THREADS')
-      .where('type', '==', 'group')
-      .where('participants', 'array-contains', user.email)
-      .onSnapshot((querySnapshot) => {
-        const isEmpty = querySnapshot.empty;
-        if (isEmpty) {
+      .doc(roomId)
+      .get()
+      .then((currData) => {
+        const roomParticipants = currData.data().participants;
+        const isParticipant = roomParticipants.includes(user.email);
+        if (!isParticipant) {
           firebaseApp
             .firestore()
             .collection('THREADS')
