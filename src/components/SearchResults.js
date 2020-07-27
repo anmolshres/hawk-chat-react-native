@@ -11,7 +11,9 @@ export const SearchResults = ({
   searchQuery,
   handleAddThread,
   openProfile,
+  navigation
 }) => {
+  console.log(matches[0]);
   if (searchQuery.length == 0) {
     return null;
   }
@@ -46,6 +48,7 @@ export const SearchResults = ({
               match={match}
               openProfile={openProfile}
               key={match.name}
+              navigation={navigation}
             />
           );
         }

@@ -31,9 +31,9 @@ export default function StartMessage({ navigation }) {
       .firestore()
       .collection('THREADS')
       .onSnapshot((querySnapshot) => {
-        const currentResult = querySnapshot.docs.map((singleDoc) =>
-          singleDoc.data()
-        );
+        const currentResult = querySnapshot.docs.map((singleDoc) => {
+          return { _id: singleDoc.id, ...singleDoc.data() };
+        });
         setThreadOptions([...currentResult]);
       });
 
@@ -127,6 +127,7 @@ export default function StartMessage({ navigation }) {
           searchQuery={searchQuery}
           handleAddThread={handleAddThread}
           openProfile={openProfile}
+          navigation={navigation}
         />
       </View>
     </View>

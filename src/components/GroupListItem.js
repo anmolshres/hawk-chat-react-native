@@ -4,7 +4,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 
 const { width, height } = Dimensions.get('screen');
 
-export const GroupListItem = ({ match, openProfile }) => {
+export const GroupListItem = ({ match, openProfile, navigation }) => {
   return (
     <List.Item
       title={match.name}
@@ -13,7 +13,7 @@ export const GroupListItem = ({ match, openProfile }) => {
         <IconButton
           size={30}
           icon="pencil"
-          onPress={() => console.log(match.name)}
+          onPress={() => navigation.navigate('Room', { thread: match })}
         />
       )}
       style={styles.result}
