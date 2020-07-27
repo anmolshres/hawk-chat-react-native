@@ -24,16 +24,16 @@ export default function StartMessage({ navigation }) {
       .firestore()
       .collection('USERS')
       .onSnapshot((querySnapshot) => {
-        const currentResult = querySnapshot.docs.map((singleDoc) =>
-          singleDoc.data()
-        );
+        const currentResult = querySnapshot.docs.map((singleDoc) => {
+          return { _id: singleDoc.id, ...singleDoc.data() };
+        });
         setTextOptions([...currentResult]);
       });
 
     const unsubscribeThreads = firebaseApp
       .firestore()
       .collection('THREADS')
-      .where('type','==','group')
+      .where('type', '==', 'group')
       .onSnapshot((querySnapshot) => {
         const currentResult = querySnapshot.docs.map((singleDoc) => {
           return { _id: singleDoc.id, ...singleDoc.data() };
