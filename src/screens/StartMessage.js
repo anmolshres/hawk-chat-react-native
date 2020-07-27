@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { IconButton, Title, Searchbar } from 'react-native-paper';
 import firebaseApp from '../../firebase';
 import useStatsBar from '../utils/useStatusBar';
 import Loading from '../components/Loading';
 import SearchResults from '../components/SearchResults';
+import { AuthContext } from '../navigation/AuthProvider';
+import getUserInfo from '../utils/getUserInfo';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -15,6 +17,7 @@ export default function StartMessage({ navigation }) {
   const [searchResults, setSearchResults] = useState([]);
   const [textOptions, setTextOptions] = useState([]);
   const [threadOptions, setThreadOptions] = useState([]);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const unsubscribePeople = firebaseApp
@@ -57,24 +60,28 @@ export default function StartMessage({ navigation }) {
    */
   function handleAddThread(roomName) {
     if (roomName.length > 0) {
-      firebaseApp
-        .firestore()
-        .collection('THREADS')
-        .add({
-          name: roomName,
-          latestMessage: {
-            text: `You have joined the room ${roomName}.`,
-            createdAt: new Date().getTime(),
-          },
-        })
-        .then((docRef) => {
-          docRef.collection('MESSAGES').add({
-            text: `You have joined the room ${roomName}.`,
-            createdAt: new Date().getTime(),
-            system: true,
+      getUserInfo(user.email).then((currUser) => {
+        firebaseApp
+          .firestore()
+          .collection('THREADS')
+          .add({
+            name: roomName,
+            latestMessage: {
+              text: `${currUser.displayName} created ${roomName}.`,
+              createdAt: new Date().getTime(),
+            },
+            participants: [currUser.email],
+            type: 'group',
+          })
+          .then((docRef) => {
+            docRef.collection('MESSAGES').add({
+              text: `${currUser.displayName} created ${roomName}.`,
+              createdAt: new Date().getTime(),
+              system: true,
+            });
+            navigation.navigate('Home');
           });
-          navigation.navigate('Home');
-        });
+      });
     }
   }
 
