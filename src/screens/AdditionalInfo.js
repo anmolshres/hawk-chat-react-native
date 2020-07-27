@@ -13,13 +13,23 @@ export default function AdditionalInfo({ navigation }) {
   const [year, setYear] = useState('');
   const [major, setMajor] = useState('');
   const [hometown, setHometown] = useState('');
+
+  function handleSubmit() {
+    if (displayName.length && year.length && major.length && hometown.length) {
+      createProfile(user, displayName, year, major, hometown);
+      navigation.navigate('ChatApp');
+    } else {
+      alert('Please fill in all fields');
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Title style={styles.titleText}>Register to chat</Title>
       <FormInput
         labelName="Name"
         value={displayName}
-        placeholder="John"
+        placeholder="John Simon"
         autoCapitalize="words"
         onChangeText={(displayName) => setDisplayName(displayName)}
       />
@@ -48,19 +58,15 @@ export default function AdditionalInfo({ navigation }) {
         title="Signup"
         modeValue="contained"
         labelStyle={styles.loginButtonLabel}
-        onPress={() => {
-          if (
+        disabled={
+          !(
             displayName.length &&
             year.length &&
             major.length &&
             hometown.length
-          ) {
-            createProfile(user, displayName, year, major, hometown);
-            navigation.navigate('ChatApp');
-          } else {
-            alert('Please fill in all fields');
-          }
-        }}
+          )
+        }
+        onPress={() => handleSubmit()}
       />
       <IconButton
         icon="keyboard-backspace"
