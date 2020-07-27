@@ -13,7 +13,6 @@ export const SearchResults = ({
   openProfile,
   navigation
 }) => {
-  console.log(matches[0]);
   if (searchQuery.length == 0) {
     return null;
   }
