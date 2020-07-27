@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { List, Divider, Text, IconButton } from 'react-native-paper';
+import { Divider, Text, IconButton } from 'react-native-paper';
 import firebaseApp from '../../firebase';
 import Loading from '../components/Loading';
 import useStatsBar from '../utils/useStatusBar';
 import { AuthContext } from '../navigation/AuthProvider';
+import ChatListItem from '../components/ChatListItem';
 
 export default function HomeScreen({ navigation }) {
   useStatsBar('light-content');
@@ -57,7 +58,9 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       {threads.length === 0 ? (
         <View style={styles.emptyMessage}>
-          <Text style={styles.text}>Press icon below to start connecting🤗</Text>
+          <Text style={styles.text}>
+            Press icon below to start connecting🤗
+          </Text>
           <IconButton
             icon="message-plus"
             size={28}
@@ -74,14 +77,7 @@ export default function HomeScreen({ navigation }) {
             <TouchableOpacity
               onPress={() => navigation.navigate('Room', { thread: item })}
             >
-              <List.Item
-                title={item.name}
-                description={item.latestMessage.text}
-                titleNumberOfLines={1}
-                titleStyle={styles.listTitle}
-                descriptionStyle={styles.listDescription}
-                descriptionNumberOfLines={1}
-              />
+              <ChatListItem item={item} />
             </TouchableOpacity>
           )}
         />
@@ -95,14 +91,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     flex: 1,
   },
-  listTitle: {
-    fontSize: 22,
-  },
   listDescription: {
     fontSize: 16,
   },
-  text:{
-    fontSize:18,
+  text: {
+    fontSize: 18,
   },
   emptyMessage: {
     flex: 1,
