@@ -63,6 +63,10 @@ export default function StartMessage({ navigation }) {
   }
 
   function handleSearchPress() {
+    if (searchQuery == '') {
+      setSearchResults([]);
+      return;
+    }
     const cleanedQuery = searchQuery.toLowerCase().replace(/ /g, '');
     const results = textOptions.filter((option) => {
       return option.displayName
