@@ -35,9 +35,13 @@ export const SearchResults = ({
             title={match.displayName.concat(
               ` (${match.email.replace(/@.*/g, '')})`
             )}
-            left={() => (
-              <Avatar.Image size={30} source={{ uri: match.avatar }} />
-            )}
+            left={() =>
+              match.avatar ? (
+                <Avatar.Image size={30} source={{ uri: match.avatar }} />
+              ) : (
+                <Avatar.Icon size={30} icon="account" />
+              )
+            }
             right={() => (
               <IconButton
                 size={30}
