@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { List, Avatar, IconButton } from 'react-native-paper';
+import { List, Avatar } from 'react-native-paper';
 import { StyleSheet, Dimensions } from 'react-native';
+import PersonListItem from './PersonListItem';
+import GroupListItem from './GroupListItem';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -32,44 +34,18 @@ export const SearchResults = ({
       {matches.map((match) => {
         if (match.displayName) {
           return (
-            <List.Item
-              title={match.displayName.concat(
-                ` (${match.email.replace(/@.*/g, '')})`
-              )}
-              left={() =>
-                match.avatar ? (
-                  <Avatar.Image size={30} source={{ uri: match.avatar }} />
-                ) : (
-                  <Avatar.Icon size={30} icon="account" />
-                )
-              }
-              right={() => (
-                <IconButton
-                  size={30}
-                  icon="pencil"
-                  onPress={(bro) => console.log(match.displayName)}
-                />
-              )}
-              style={styles.result}
+            <PersonListItem
+              match={match}
+              openProfile={openProfile}
               key={match.email}
-              onPress={() => openProfile()}
             />
           );
         } else {
           return (
-            <List.Item
-              title={match.name}
-              left={() => <Avatar.Icon size={30} icon="account-group" />}
-              right={() => (
-                <IconButton
-                  size={30}
-                  icon="pencil"
-                  onPress={(bro) => console.log(match.name)}
-                />
-              )}
-              style={styles.result}
+            <GroupListItem
+              match={match}
+              openProfile={openProfile}
               key={match.name}
-              onPress={() => openProfile()}
             />
           );
         }
