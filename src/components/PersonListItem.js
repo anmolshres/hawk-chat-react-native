@@ -7,6 +7,7 @@ import getUserInfo from '../utils/getUserInfo';
 
 const { width, height } = Dimensions.get('screen');
 
+//Emjois yay 😅😅😅 
 export const PersonListItem = ({ match, openProfile, navigation }) => {
   const { user } = useContext(AuthContext);
 
