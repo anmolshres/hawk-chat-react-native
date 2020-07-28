@@ -3,13 +3,14 @@ import { View, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { IconButton } from 'react-native-paper';
 import HomeScreen from '../screens/HomeScreen';
-import AddRoomScreen from '../screens/AddRoomScreen';
+import StartMessage from '../screens/StartMessage';
 import MyProfileScreen from '../screens/MyProfileScreen';
 import RoomScreen from '../screens/RoomScreen';
 import { AuthContext } from './AuthProvider';
 import AdditionalInfo from '../screens/AdditionalInfo';
 import Loading from '../components/Loading';
 import firebaseApp from '../../firebase';
+import getUserInfo from '../utils/getUserInfo';
 
 const ChatAppStack = createStackNavigator();
 const ModalStack = createStackNavigator();
@@ -19,7 +20,21 @@ const ModalStack = createStackNavigator();
  */
 
 function ChatApp() {
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
+  const [title, setTitle] = useState('Loading😫');
+
+  async function getOtherUser(thread) {
+    if (thread.type === 'group') {
+      setTitle(thread.name);
+      return;
+    }
+    const allParticipants = thread.participants;
+    const otherParticipant = allParticipants.filter(
+      (oneUser) => oneUser !== user.email
+    );
+    const otherUser = await getUserInfo(otherParticipant[0]);
+    setTitle(otherUser.displayName);
+  }
 
   return (
     <ChatAppStack.Navigator
@@ -55,7 +70,7 @@ function ChatApp() {
           ),
           headerLeft: () => (
             <IconButton
-              icon="logout-variant"
+              icon="logout"
               size={28}
               color="#ffffff"
               onPress={() => logout()}
@@ -66,9 +81,14 @@ function ChatApp() {
       <ChatAppStack.Screen
         name="Room"
         component={RoomScreen}
-        options={({ route }) => ({
-          title: route.params.thread.name,
-        })}
+        options={({ route }) => {
+          route.params.thread.participants
+            ? getOtherUser(route.params.thread)
+            : null;
+          return {
+            title: title,
+          };
+        }}
       />
     </ChatAppStack.Navigator>
   );
@@ -99,7 +119,7 @@ export default function HomeStack() {
     >
       <ModalStack.Screen name="ChatApp" component={ChatApp} />
       <ModalStack.Screen name="MyProfile" component={MyProfileScreen} />
-      <ModalStack.Screen name="AddRoom" component={AddRoomScreen} />
+      <ModalStack.Screen name="AddRoom" component={StartMessage} />
       <ModalStack.Screen name="AdditionalInfo" component={AdditionalInfo} />
     </ModalStack.Navigator>
   );

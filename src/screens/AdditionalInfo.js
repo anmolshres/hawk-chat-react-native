@@ -13,15 +13,26 @@ export default function AdditionalInfo({ navigation }) {
   const [year, setYear] = useState('');
   const [major, setMajor] = useState('');
   const [hometown, setHometown] = useState('');
+
+  function handleSubmit() {
+    if (displayName.length && year.length && major.length && hometown.length) {
+      createProfile(user, displayName, year, major, hometown);
+      navigation.navigate('ChatApp');
+    } else {
+      alert('Please fill in all fields');
+    }
+  }
+
   return (
     <View style={styles.container}>
       <Title style={styles.titleText}>Register to chat</Title>
       <FormInput
         labelName="Name"
         value={displayName}
-        placeholder="John"
+        placeholder="John Simon"
         autoCapitalize="words"
         onChangeText={(displayName) => setDisplayName(displayName)}
+        onSubmitEditing={() => handleSubmit()}
       />
       <FormInput
         labelName="Class Year"
@@ -29,6 +40,7 @@ export default function AdditionalInfo({ navigation }) {
         keyboardType="numeric"
         placeholder="2024"
         onChangeText={(year) => setYear(year)}
+        onSubmitEditing={() => handleSubmit()}
       />
       <FormInput
         labelName="Major"
@@ -36,6 +48,7 @@ export default function AdditionalInfo({ navigation }) {
         placeholder="Computer Science"
         autoCapitalize="words"
         onChangeText={(major) => setMajor(major)}
+        onSubmitEditing={() => handleSubmit()}
       />
       <FormInput
         labelName="Hometown"
@@ -43,24 +56,21 @@ export default function AdditionalInfo({ navigation }) {
         placeholder="Bethlehem, PA"
         autoCapitalize="words"
         onChangeText={(hometown) => setHometown(hometown)}
+        onSubmitEditing={() => handleSubmit()}
       />
       <FormButton
         title="Signup"
         modeValue="contained"
         labelStyle={styles.loginButtonLabel}
-        onPress={() => {
-          if (
+        disabled={
+          !(
             displayName.length &&
             year.length &&
             major.length &&
             hometown.length
-          ) {
-            createProfile(user, displayName, year, major, hometown);
-            navigation.navigate('ChatApp');
-          } else {
-            alert('Please fill in all fields');
-          }
-        }}
+          )
+        }
+        onPress={() => handleSubmit()}
       />
       <IconButton
         icon="keyboard-backspace"

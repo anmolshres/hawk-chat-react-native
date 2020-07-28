@@ -72,11 +72,13 @@ export default function LoginScreen({ navigation }) {
         value={email}
         autoCapitalize="none"
         onChangeText={(userEmail) => setEmail(userEmail)}
+        onSubmitEditing={() => promptAsync({ useProxy })}
       />
       <FormButton
         title="Login"
         modeValue="contained"
         labelStyle={styles.loginButtonLabel}
+        disabled={email.length === 0}
         onPress={() => {
           promptAsync({ useProxy });
         }}
