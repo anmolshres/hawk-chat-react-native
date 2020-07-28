@@ -70,7 +70,7 @@ function ChatApp() {
           ),
           headerLeft: () => (
             <IconButton
-              icon="logout-variant"
+              icon="logout"
               size={28}
               color="#ffffff"
               onPress={() => logout()}
