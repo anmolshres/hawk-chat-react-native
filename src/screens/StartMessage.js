@@ -7,6 +7,7 @@ import Loading from '../components/Loading';
 import SearchResults from '../components/SearchResults';
 import { AuthContext } from '../navigation/AuthProvider';
 import getUserInfo from '../utils/getUserInfo';
+import getThreadFromId from '../utils/getThreadFromId';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -77,13 +78,14 @@ export default function StartMessage({ navigation }) {
             participants: [currUser.email],
             type: 'group',
           })
-          .then((docRef) => {
+          .then(async (docRef) => {
             docRef.collection('MESSAGES').add({
               text: `${currUser.displayName} created ${roomName} 🥳`,
               createdAt: new Date().getTime(),
               system: true,
             });
-            navigation.navigate('Home');
+            const currThread = await getThreadFromId(docRef.id.toString());
+            navigation.navigate('Room', { thread: currThread });
           });
       });
     }
