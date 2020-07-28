@@ -5,6 +5,7 @@ import { AuthContext } from '../navigation/AuthProvider';
 import firebaseApp from '../../firebase';
 import getUserInfo from '../utils/getUserInfo';
 import generateHash from '../utils/generateHash';
+import getThreadFromId from '../utils/getThreadFromId';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -14,46 +15,63 @@ export const PersonListItem = ({ match, openProfile, navigation }) => {
   function handleAddPrivateMessage(targetName) {
     if (targetName) {
       const hash = generateHash([targetName.email, user.email].sort().join(''));
-      getUserInfo(user.email).then((currUser) => {
-        firebaseApp
-          .firestore()
-          .collection('THREADS')
-          .doc(hash.toString().concat('private'))
-          .set({
-            name: `Private thread between ${currUser.email} and ${targetName.email}`,
-            latestMessage: {
-              text: `${currUser.displayName} started a conversation with ${targetName.displayName}.`,
-              createdAt: new Date().getTime(),
-            },
-            participants: [currUser.email, targetName.email],
-            type: 'private',
-          })
-          .then(() => {
-            firebaseApp
-              .firestore()
-              .collection('THREADS')
-              .doc(hash.toString().concat('private'))
-              .collection('MESSAGES')
-              .get()
-              .then((currData) => {
-                if (!currData.docs.length) {
+      firebaseApp
+        .firestore()
+        .collection('THREADS')
+        .doc(hash.toString().concat('private'))
+        .get()
+        .then(async (check) => {
+          if (!check.exists) {
+            getUserInfo(user.email).then((currUser) => {
+              firebaseApp
+                .firestore()
+                .collection('THREADS')
+                .doc(hash.toString().concat('private'))
+                .set({
+                  name: `Private thread between ${currUser.email} and ${targetName.email}`,
+                  latestMessage: {
+                    text: `${currUser.displayName} started a conversation with ${targetName.displayName}.`,
+                    createdAt: new Date().getTime(),
+                  },
+                  participants: [currUser.email, targetName.email],
+                  type: 'private',
+                })
+                .then(() => {
                   firebaseApp
                     .firestore()
                     .collection('THREADS')
                     .doc(hash.toString().concat('private'))
                     .collection('MESSAGES')
-                    .add({
-                      text: `${currUser.displayName} started a conversation with ${targetName.displayName}.`,
-                      createdAt: new Date().getTime(),
-                      system: true,
+                    .get()
+                    .then(async (currData) => {
+                      if (!currData.docs.length) {
+                        firebaseApp
+                          .firestore()
+                          .collection('THREADS')
+                          .doc(hash.toString().concat('private'))
+                          .collection('MESSAGES')
+                          .add({
+                            text: `${currUser.displayName} started a conversation with ${targetName.displayName}.`,
+                            createdAt: new Date().getTime(),
+                            system: true,
+                          })
+                          .then(async () => {
+                            const currThread = await getThreadFromId(
+                              hash.toString().concat('private')
+                            );
+                            navigation.navigate('Room', { thread: currThread });
+                          });
+                      }
                     });
-                  navigation.navigate('Home');
-                } else {
-                  navigation.navigate('Home');
-                }
-              });
-          });
-      });
+                });
+            });
+          } else {
+            const currThread = await getThreadFromId(
+              hash.toString().concat('private')
+            );
+            navigation.navigate('Room', { thread: currThread });
+          }
+        });
     }
   }
 

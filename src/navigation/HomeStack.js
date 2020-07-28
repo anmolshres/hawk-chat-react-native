@@ -82,7 +82,9 @@ function ChatApp() {
         name="Room"
         component={RoomScreen}
         options={({ route }) => {
-          getOtherUser(route.params.thread);
+          route.params.thread.participants
+            ? getOtherUser(route.params.thread)
+            : null;
           return {
             title: title,
           };
