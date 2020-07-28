@@ -3,6 +3,7 @@ import { List, Avatar, IconButton } from 'react-native-paper';
 import { StyleSheet, Dimensions } from 'react-native';
 import { AuthContext } from '../navigation/AuthProvider';
 import firebaseApp from '../../firebase';
+import getUserInfo from '../utils/getUserInfo';
 
 const { width, height } = Dimensions.get('screen');
 const firebase = require('firebase/app');
@@ -29,6 +30,32 @@ export const GroupListItem = ({ match, openProfile, navigation }) => {
                 user.email
               ),
             });
+          getUserInfo(user.email).then((currUser) => {
+            firebaseApp
+              .firestore()
+              .collection('THREADS')
+              .doc(roomId)
+              .collection('MESSAGES')
+              .add({
+                text: `${currUser.displayName} has entered the chat 🧐`,
+                createdAt: new Date().getTime(),
+                system: true,
+              });
+
+            firebaseApp
+              .firestore()
+              .collection('THREADS')
+              .doc(roomId)
+              .set(
+                {
+                  latestMessage: {
+                    text: `${currUser.displayName} has entered the chat 🧐`,
+                    createdAt: new Date().getTime(),
+                  },
+                },
+                { merge: true }
+              );
+          });
         }
       });
   }
