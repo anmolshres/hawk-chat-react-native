@@ -27,7 +27,10 @@ export default function StartMessage({ navigation }) {
         const currentResult = querySnapshot.docs.map((singleDoc) => {
           return { _id: singleDoc.id, ...singleDoc.data() };
         });
-        setTextOptions([...currentResult]);
+        const toPush = currentResult.filter((current) => {
+          return current.email !== user.email;
+        });
+        setTextOptions([...toPush]);
       });
 
     const unsubscribeThreads = firebaseApp
