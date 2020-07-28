@@ -19,7 +19,7 @@ export const PersonListItem = ({ match, openProfile, navigation }) => {
           .add({
             name: `Private thread between ${currUser.email} and ${targetName.email}`,
             latestMessage: {
-              text: `${currUser.displayName} started a conversation with ${targetName.displayName}.`,
+              text: `${currUser.displayName} started a conversation with ${targetName.displayName} 😇`,
               createdAt: new Date().getTime(),
             },
             participants: [currUser.email, targetName.email],
@@ -27,7 +27,7 @@ export const PersonListItem = ({ match, openProfile, navigation }) => {
           })
           .then((docRef) => {
             docRef.collection('MESSAGES').add({
-              text: `${currUser.displayName} started a conversation with ${targetName.displayName}.`,
+              text: `${currUser.displayName} started a conversation with ${targetName.displayName} 😇`,
               createdAt: new Date().getTime(),
               system: true,
             });

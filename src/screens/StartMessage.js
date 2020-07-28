@@ -71,7 +71,7 @@ export default function StartMessage({ navigation }) {
           .add({
             name: roomName,
             latestMessage: {
-              text: `${currUser.displayName} created ${roomName}.`,
+              text: `${currUser.displayName} created ${roomName} 🥳`,
               createdAt: new Date().getTime(),
             },
             participants: [currUser.email],
@@ -79,7 +79,7 @@ export default function StartMessage({ navigation }) {
           })
           .then((docRef) => {
             docRef.collection('MESSAGES').add({
-              text: `${currUser.displayName} created ${roomName}.`,
+              text: `${currUser.displayName} created ${roomName} 🥳`,
               createdAt: new Date().getTime(),
               system: true,
             });
