@@ -10,6 +10,7 @@ import { AuthContext } from './AuthProvider';
 import AdditionalInfo from '../screens/AdditionalInfo';
 import Loading from '../components/Loading';
 import firebaseApp from '../../firebase';
+import getUserInfo from '../utils/getUserInfo';
 
 const ChatAppStack = createStackNavigator();
 const ModalStack = createStackNavigator();
@@ -19,7 +20,21 @@ const ModalStack = createStackNavigator();
  */
 
 function ChatApp() {
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
+  const [title, setTitle] = useState('Loading😫');
+
+  async function getOtherUser(thread) {
+    if (thread.type === 'group') {
+      setTitle(thread.name);
+      return;
+    }
+    const allParticipants = thread.participants;
+    const otherParticipant = allParticipants.filter(
+      (oneUser) => oneUser !== user.email
+    );
+    const otherUser = await getUserInfo(otherParticipant[0]);
+    setTitle(otherUser.displayName);
+  }
 
   return (
     <ChatAppStack.Navigator
@@ -66,9 +81,12 @@ function ChatApp() {
       <ChatAppStack.Screen
         name="Room"
         component={RoomScreen}
-        options={({ route }) => ({
-          title: route.params.thread.name,
-        })}
+        options={({ route }) => {
+          getOtherUser(route.params.thread);
+          return {
+            title: title,
+          };
+        }}
       />
     </ChatAppStack.Navigator>
   );
