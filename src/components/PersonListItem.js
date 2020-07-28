@@ -21,10 +21,6 @@ export const PersonListItem = ({ match, openProfile, navigation }) => {
         .where('hash', '==', hash)
         .onSnapshot((snap) => {
           const haveTalked = !snap.empty;
-          const threadToNavigate = {
-            _id: snap.docs[0].id,
-            ...snap.docs[0].data(),
-          };
           if (!haveTalked) {
             getUserInfo(user.email).then((currUser) => {
               firebaseApp
@@ -50,6 +46,10 @@ export const PersonListItem = ({ match, openProfile, navigation }) => {
                 });
             });
           } else {
+            const threadToNavigate = {
+              _id: snap.docs[0].id,
+              ...snap.docs[0].data(),
+            };
             navigation.navigate('Room', { thread: threadToNavigate });
           }
         });
