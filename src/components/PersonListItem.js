@@ -34,12 +34,24 @@ export const PersonListItem = ({ match, openProfile, navigation }) => {
               .collection('THREADS')
               .doc(hash.toString().concat('private'))
               .collection('MESSAGES')
-              .add({
-                text: `${currUser.displayName} started a conversation with ${targetName.displayName}.`,
-                createdAt: new Date().getTime(),
-                system: true,
+              .get()
+              .then((currData) => {
+                if (!currData.docs.length) {
+                  firebaseApp
+                    .firestore()
+                    .collection('THREADS')
+                    .doc(hash.toString().concat('private'))
+                    .collection('MESSAGES')
+                    .add({
+                      text: `${currUser.displayName} started a conversation with ${targetName.displayName}.`,
+                      createdAt: new Date().getTime(),
+                      system: true,
+                    });
+                  navigation.navigate('Home');
+                } else {
+                  navigation.navigate('Home');
+                }
               });
-            navigation.navigate('Home');
           });
       });
     }
